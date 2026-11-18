@@ -56,8 +56,7 @@
     letter-spacing: -0.045em; font-stretch: 78%; margin: 0 0 28px; max-width: 11ch;
   }
   .hero p { margin: 0 0 clamp(40px, 7vw, 88px); max-width: 34ch; font-size: clamp(1.125rem, 1.6vw, 1.3rem); color: var(--grey); }
-  .cat { width: 100%; max-width: 440px; justify-self: end; margin-bottom: -2px; }
-  .cat svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .cat { width: 100%; max-width: 420px; justify-self: end; }
 
   /* each app is its own colour field */
   .app { padding: clamp(64px, 10vw, 120px) 0; }
@@ -126,7 +125,6 @@
   @media (max-width: 560px) {
     .top nav a:not(:last-child) { display: none; }
   }
-  @media (prefers-reduced-motion: reduce) { .pupil { transition: none !important; } }
 </style>
 </head>
 <body>
@@ -149,22 +147,7 @@
       <p>I'm Ibbie, a one-person studio. Two apps are out on Google Play, and a video editor for gamers is on the way.</p>
     </div>
     <div class="cat" aria-hidden="true">
-      <svg viewBox="0 0 400 300" id="cat">
-        <defs>
-          <clipPath id="eyeL"><path d="M116 166 L188 184 C191 210 168 224 148 220 C124 215 110 192 116 166 Z"/></clipPath>
-          <clipPath id="eyeR"><path d="M284 166 L212 184 C209 210 232 224 252 220 C276 215 290 192 284 166 Z"/></clipPath>
-        </defs>
-        <g stroke="#000" stroke-width="2.6" stroke-linecap="round">
-          <path d="M96 238 L18 230 M96 252 L24 262 M100 266 L40 292"/>
-          <path d="M304 238 L382 230 M304 252 L376 262 M300 266 L360 292"/>
-        </g>
-        <path fill="#000" d="M62 300 C52 214 62 150 92 114 C96 82 100 46 112 18 C142 40 166 70 180 94 C193 90 207 90 220 94 C234 70 258 40 288 18 C300 46 304 82 308 114 C338 150 348 214 338 300 Z"/>
-        <path fill="#fff" d="M116 166 L188 184 C191 210 168 224 148 220 C124 215 110 192 116 166 Z"/>
-        <path fill="#fff" d="M284 166 L212 184 C209 210 232 224 252 220 C276 215 290 192 284 166 Z"/>
-        <g clip-path="url(#eyeL)"><circle class="pupil" cx="166" cy="200" r="15" fill="#000"/></g>
-        <g clip-path="url(#eyeR)"><circle class="pupil" cx="234" cy="200" r="15" fill="#000"/></g>
-        <path fill="#fff" d="M191 236 Q200 233 209 236 L201 246 Q200 247 199 246 Z"/>
-      </svg>
+      <img src="img/cat.webp" alt="" width="880" height="880">
     </div>
   </section>
 
@@ -297,31 +280,6 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
-  // The cat watches the pointer.
-  (function () {
-    const svg = document.getElementById('cat');
-    const pupils = svg.querySelectorAll('.pupil');
-    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (still) return;
-    const home = [...pupils].map(p => [+p.getAttribute('cx'), +p.getAttribute('cy')]);
-    let frame = 0;
-    function look(x, y) {
-      cancelAnimationFrame(frame);
-      frame = requestAnimationFrame(() => {
-        const r = svg.getBoundingClientRect();
-        const s = 400 / r.width;
-        pupils.forEach((p, i) => {
-          const ex = r.left + home[i][0] / s, ey = r.top + home[i][1] / s;
-          const dx = x - ex, dy = y - ey, d = Math.hypot(dx, dy) || 1;
-          const reach = Math.min(1, d / 260);
-          p.setAttribute('cx', home[i][0] + (dx / d) * 11 * reach);
-          p.setAttribute('cy', home[i][1] + (dy / d) * 7 * reach);
-        });
-      });
-    }
-    addEventListener('pointermove', e => look(e.clientX, e.clientY), { passive: true });
-    addEventListener('pointerdown', e => look(e.clientX, e.clientY), { passive: true });
-  })();
 </script>
 </body>
 </html>
