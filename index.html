@@ -36,6 +36,8 @@
     -webkit-font-smoothing: antialiased; overflow-x: hidden;
   }
   img { display: block; max-width: 100%; height: auto; }
+  /* no dragging, selecting or long-press saving of the artwork */
+  img { -webkit-user-drag: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
   a { color: inherit; }
   :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; border-radius: 4px; }
   .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--gutter); }
@@ -105,7 +107,7 @@
   .timeline svg { width: 100%; height: auto; display: block; }
   .timeline figcaption { margin-top: 14px; font-size: 0.95rem; color: var(--grey); }
 
-  .contact { padding: clamp(72px, 11vw, 140px) 0; }
+  .contact { padding-top: clamp(72px, 11vw, 140px); padding-bottom: clamp(72px, 11vw, 140px); }
   .contact h2 { font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.02; letter-spacing: -0.04em; font-stretch: 82%; font-weight: 750; margin: 0 0 18px; max-width: 18ch; }
   .contact p { margin: 0 0 30px; color: var(--grey); max-width: 44ch; }
   .mail { font-size: clamp(1.4rem, 3.6vw, 2.6rem); font-weight: 700; letter-spacing: -0.03em; text-underline-offset: 8px; text-decoration-thickness: 3px; overflow-wrap: anywhere; }
@@ -280,6 +282,10 @@
 
 <script>
   document.getElementById('year').textContent = new Date().getFullYear();
+  // Keep the "Save image" menu and drag-to-desktop off the artwork.
+  for (const type of ['contextmenu', 'dragstart']) {
+    document.addEventListener(type, e => { if (e.target.closest('img')) e.preventDefault(); });
+  }
 </script>
 </body>
 </html>
